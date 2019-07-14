@@ -16,17 +16,20 @@ case class Queue[+A](in: List[A], out: List[A]) {
 
   // O(1) time and space amortized
   def dequeue: (Option[A], Queue[A]) = out match {
-    case h :: t => Some(h) -> new Queue(in, t)
+    case h :: t =>
+      Some(h) -> new Queue(in, t)
     case Nil => in.reverse match {
-      case h :: t => Some(h) -> new Queue(Nil, t)
-      case Nil => None -> new Queue(Nil, Nil)
+      case h :: t =>
+        Some(h) -> new Queue(Nil, t)
+      case Nil =>
+        None -> new Queue(Nil, Nil)
     }
   }
 
-  // O(1)
+  // O(1) time and space
   def front: Option[A] = dequeue._1
 
-  // O(n) time and space
+  // O(1) time and space
   def rear: Queue[A] = dequeue._2
 
   // O(1) time and space
@@ -52,11 +55,9 @@ object Queue {
   // O(n) time and O(1) space
   def apply[A](as: A*): Queue[A] = as.foldLeft(empty[A])((memo, next) => memo.enqueue(next))
 
-  // O(n) time and O(1) space
+  // O(n) time and space
   def apply[A](stack: Stack[A]): Queue[A] =
-    (0 to stack.size).foldLeft(empty[A]) { (memo, _) =>
-      stack.pop._1.fold(memo)(memo.enqueue)
-    }
+    apply(stack.toList.reverse: _*)
 
   // O(n log n) time and space
   def sort[A](queue: Queue[A])(implicit ordering: Ordering[A]): Queue[A] =

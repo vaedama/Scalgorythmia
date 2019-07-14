@@ -11,13 +11,13 @@ class StackSpec extends FunSuite {
     .push(4)
 
   test("pop") {
-    val (top, bottom) = stack.pop
-    assert(top.contains(4))
-    assert(bottom == Stack(List(3, 2, 1)))
+    val Some((top, bottom)) = stack.pop
+    assert(top == 4)
+    assert(bottom === Stack(List(3, 2, 1)))
   }
 
   test("push") {
-    assert(stack.push(5) == Stack(List(5, 4, 3, 2, 1)))
+    assert(stack.push(5) === Stack(5, 4, 3, 2, 1))
   }
 
   test("top") {
@@ -25,7 +25,7 @@ class StackSpec extends FunSuite {
   }
 
   test("rest") {
-    assert(stack.bottom == Stack(List(3, 2, 1)))
+    assert(stack.bottom == Stack(3, 2, 1))
   }
 
   test("isEmpty") {
