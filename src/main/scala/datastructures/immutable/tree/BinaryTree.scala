@@ -149,6 +149,26 @@ trait BinaryTree[+A] {
     case _ => false
   }
 
+  // Avg. case: O(log n) time and space
+  // Worst case: O(n) time and space
+  def findClosestValueInBST[B >: A](target: B)(implicit numeric: Numeric[B]): Option[B] = {
+    @tailrec def loop(tree: BinaryTree[B], lastClosest: Option[B]): Option[B] = tree match {
+      case Leaf => lastClosest
+      case Branch(l, v, r) =>
+        val newClosest = lastClosest match {
+          case None => v
+          case Some(prev) =>
+            val curCloseness = numeric.abs(numeric.minus(target, v))
+            val prevCloseness = numeric.abs(numeric.minus(target, prev))
+            if (numeric.lt(curCloseness, prevCloseness)) v else prev
+        }
+        if (numeric.lt(target, v)) loop(l, Some(newClosest))
+        else loop(r, Some(newClosest))
+    }
+
+    loop(this, None)
+  }
+
   // O(n) time because every node has to be processed
   // O(log n) space because at any given time there are log n entries on the recursive call stack
   def toList: List[A] = {

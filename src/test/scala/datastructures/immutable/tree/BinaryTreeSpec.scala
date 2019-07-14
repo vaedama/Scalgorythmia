@@ -41,24 +41,24 @@ class BinaryTreeSpec extends FunSuite {
     assert(BinaryTree.buildComplete(1, 4).isComplete)
   }
 
-  test("isBST: valid scenario") {
 
-    /*
+  /*
 
-     5
+   5
+  / \
+ 1   6
     / \
-   1   6
-      / \
-     4  7
+   4  7
 
-    */
+  */
 
-    val tree = Branch(
-      Branch(Leaf, 1, Leaf),
-      5,
-      Branch(Branch(Leaf, 4, Leaf), 6, Branch(Leaf, 7, Leaf)))
+  val bst: BinaryTree[Int] = Branch(
+    Branch(Leaf, 1, Leaf),
+    5,
+    Branch(Branch(Leaf, 4, Leaf), 6, Branch(Leaf, 7, Leaf)))
 
-    assert(tree.isBST)
+  test("isBST: valid scenario") {
+    assert(bst.isBST)
   }
 
   test("isBST: invalid scenario") {
@@ -255,6 +255,11 @@ class BinaryTreeSpec extends FunSuite {
 
   test("maxSumPath: tree 3") {
     assert(tree3.maxSumPath == List(11, 3, 5, 7, 100))
+  }
+
+  test("findClosestValueInBST") {
+    assert(bst.findClosestValueInBST(2).contains(1))
+    assert(bst.findClosestValueInBST(9).contains(7))
   }
 
 }
