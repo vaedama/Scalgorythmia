@@ -102,22 +102,22 @@ trait BinaryTree[+A] {
       else this
   }
 
-  // O(log n) time and space
-  def remove[B >: A](b: B)(implicit ord: Ordering[B]): BinaryTree[A] = this match {
-    case Leaf => Leaf
-    case Branch(l, v, r) =>
-      if (ord.lt(b, v)) Branch(l.remove(b), v, r)
-      else if (ord.gt(b, v)) Branch(l, v, r.remove(b))
-      else {
-        if (l == Leaf && r == Leaf) Leaf
-        else if (l == Leaf) r
-        else if (r == Leaf) l
-        else {
-          val rightMin = r.min
-          Branch(l, rightMin, r.remove(rightMin))
-        }
-      }
-  }
+//  // O(log n) time and space
+//  def remove[B >: A](b: B)(implicit ord: Ordering[B]): BinaryTree[B] = this match {
+//    case Leaf => Leaf
+//    case Branch(l, v, r) =>
+//      if (ord.lt(b, v)) Branch(l.remove(b), v, r)
+//      else if (ord.gt(b, v)) Branch(l, v, r.remove(b))
+//      else {
+//        if (l == Leaf && r == Leaf) Leaf
+//        else if (l == Leaf) r
+//        else if (r == Leaf) l
+//        else {
+//          val rmin = r.min.get
+//          Branch(l, rmin, r.remove(rmin))
+//        }
+//      }
+//  }
 
   // O(log n) time and space
   def min: Option[A] = {
