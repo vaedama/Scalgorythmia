@@ -103,6 +103,36 @@ trait BinaryTree[+A] {
   }
 
   // O(log n) time and space
+  def remove[B >: A](b: B)(implicit ord: Ordering[B]): BinaryTree[A] = this match {
+    case Leaf => Leaf
+    case Branch(l, v, r) =>
+      if (ord.lt(b, v)) Branch(l.remove(b), v, r)
+      else if (ord.gt(b, v)) Branch(l, v, r.remove(b))
+      else {
+        if (l == Leaf && r == Leaf) Leaf
+        else if (l == Leaf) r
+        else if (r == Leaf) l
+        else {
+          val rightMin = r.min
+          Branch(l, rightMin, r.remove(rightMin))
+        }
+      }
+  }
+
+  // O(log n) time and space
+  def min: Option[A] = {
+    @tailrec def loop(t: BinaryTree[A], min: A): A = t match {
+      case Leaf => min
+      case Branch(l, v, _) => loop(l, v)
+    }
+
+    this match {
+      case Leaf => None
+      case Branch(l, v, _) => Some(loop(l, v))
+    }
+  }
+
+  // O(log n) time and space
   def contains[B >: A](b: B)(implicit ord: Ordering[B]): Boolean = this match {
     case Leaf => false
     case Branch(l, v, r) =>
