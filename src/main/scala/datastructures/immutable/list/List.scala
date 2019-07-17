@@ -2,7 +2,7 @@ package datastructures.immutable.list
 
 import scala.annotation.tailrec
 
-// Functional implementation of singly-linked-list
+// Purely functional implementation of singly-linked-list
 
 // The covariant type +A allows us to say:
 // val strings: List[String] = Nil
@@ -110,7 +110,7 @@ sealed trait List[+A] {
   // O(n) time and space
   def product[B >: A](implicit numeric: Numeric[B]): B = this match {
     case Nil => numeric.one
-    case h :: t if h == numeric.zero => numeric.zero
+    case h :: _ if h == numeric.zero => numeric.zero
     case h :: t => numeric.times(h, t.product(numeric))
   }
 
