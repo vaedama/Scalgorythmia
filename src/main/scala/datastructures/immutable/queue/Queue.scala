@@ -9,20 +9,23 @@ import datastructures.immutable.stack.Stack
 // - BFS
 // - Priority Queue: Priority switching between processes by OS
 // - Circular queue: Event handling
-case class Queue[+A](in: List[A], out: List[A]) {
+case class Queue[+A] private(
+  in: List[A],
+  out: List[A],
+  _size: Int) {
 
   // O(1) time and space
-  def enqueue[B >: A](b: B): Queue[B] = new Queue(b :: in, out)
+  def enqueue[B >: A](b: B): Queue[B] = new Queue(b :: in, out, _size + 1)
 
   // O(1) time and space amortized
   def dequeue: (Option[A], Queue[A]) = out match {
     case h :: t =>
-      Some(h) -> new Queue(in, t)
+      Some(h) -> new Queue(in, t, _size - 1)
     case Nil => in.reverse match {
       case h :: t =>
-        Some(h) -> new Queue(Nil, t)
+        Some(h) -> new Queue(Nil, t, _size - 1)
       case Nil =>
-        None -> new Queue(Nil, Nil)
+        None -> new Queue(Nil, Nil, 0)
     }
   }
 
@@ -35,8 +38,14 @@ case class Queue[+A](in: List[A], out: List[A]) {
   // O(1) time and space
   def isEmpty: Boolean = in.isEmpty && out.isEmpty
 
+  // O(1) time and space
+  def size: Int = _size
+
   // O(n) time and space
-  def size: Int = in.size + out.size
+  def reverse(n: Int): Queue[A] = {
+    val (left, right) = toList.splitAt(n)
+    new Queue(Nil, left.reverse ++ right, _size)
+  }
 
   def mkString: String = {
     if (in.isEmpty && out.isEmpty) "Queue()"
@@ -50,7 +59,7 @@ case class Queue[+A](in: List[A], out: List[A]) {
 object Queue {
 
   // O(1) time and space
-  def empty[A]: Queue[A] = new Queue(Nil, Nil)
+  def empty[A]: Queue[A] = new Queue(Nil, Nil, 0)
 
   // O(n) time and O(1) space
   def apply[A](as: A*): Queue[A] = as.foldLeft(empty[A])((memo, next) => memo.enqueue(next))
@@ -61,6 +70,6 @@ object Queue {
 
   // O(n log n) time and space
   def sort[A](queue: Queue[A])(implicit ordering: Ordering[A]): Queue[A] =
-    new Queue(Nil, MergeSort.sort[A](queue.toList).toList)
+    new Queue(Nil, MergeSort.sort[A](queue.toList).toList, queue.size)
 
 }
