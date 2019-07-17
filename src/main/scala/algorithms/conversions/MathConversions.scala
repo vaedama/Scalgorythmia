@@ -43,7 +43,7 @@ object MathConversions {
   def binaryToDecimal(binary: BigInt): Int = {
     @tailrec def loop(remBin: String, sum: Int): Int =
       if (remBin.isEmpty) sum
-      else loop(remBin.tail, (2 * sum) + Integer.parseInt(s"${remBin.head}", 10))
+      else loop(remBin.tail, (2 * sum) + remBin.head.toString.toInt)
 
     loop(binary.toString, 0)
   }
