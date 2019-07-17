@@ -1,6 +1,5 @@
 package algorithms.searching
 
-
 import scala.annotation.tailrec
 
 object BinarySearch {
@@ -13,7 +12,7 @@ object BinarySearch {
     * @return index of the given element. None if not found.
     */
   // O(log n) time and space
-  def indexOf[A](a: A, sortedArray: Array[A])(implicit ord: Ordering[A]): Option[Int] = {
+  def liftIndex[A](a: A, sortedArray: Array[A])(implicit ord: Ordering[A]): Option[Int] = {
     if (sortedArray.isEmpty) None
     else {
       @tailrec def loop(lowIdx: Int, highIdx: Int): Option[Int] = {
@@ -33,7 +32,7 @@ object BinarySearch {
   }
 
   // O(log n) time and space
-  def indexOfInRotatedArray[A](a: A, rotatedArray: Array[A])(implicit ord: Ordering[A]): Option[Int] = {
+  def liftIndexInRotatedArray[A](a: A, rotatedArray: Array[A])(implicit ord: Ordering[A]): Option[Int] = {
     if (rotatedArray.isEmpty) None
     else {
       @tailrec def loop(lowIdx: Int, highIdx: Int): Option[Int] = {
