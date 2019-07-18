@@ -44,4 +44,16 @@ class ArraysSpec extends FunSuite {
     assert(expected === actual)
   }
 
+  test("rotateArray: negative rotations") {
+    val actual = Arrays.rotateArray(IndexedSeq(1, 10, 20, 0, 59, 86, 32, 11, 9, 40), -1)
+    val expected = IndexedSeq(10, 20, 0, 59, 86, 32, 11, 9, 40, 1)
+    assert(expected === actual)
+  }
+
+  test("rotateArray: positive rotations") {
+    val actual = Arrays.rotateArray(IndexedSeq(1, 10, 20, 0, 59, 86, 32, 11, 9, 40), 2)
+    val expected = IndexedSeq(9, 40, 1, 10, 20, 0, 59, 86, 32, 11)
+    assert(expected === actual)
+  }
+
 }

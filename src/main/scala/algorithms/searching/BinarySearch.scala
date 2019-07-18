@@ -59,20 +59,4 @@ object BinarySearch {
     }
   }
 
-  // O(n) time and space
-  def rotateArray[A](seq: IndexedSeq[A], rotations: Int): IndexedSeq[A] = {
-    seq match {
-      case Seq() => seq
-      case Seq(_) => seq
-      case _ =>
-        @tailrec def loop(rem: Int, memo: IndexedSeq[A]): IndexedSeq[A] = {
-          if (rem == 0) memo
-          else if (rem > 0) loop(rem - 1, memo.last +: memo.dropRight(1))
-          else loop(rem + 1, memo.tail :+ memo.head)
-        }
-
-        loop(rotations, seq)
-    }
-  }
-
 }

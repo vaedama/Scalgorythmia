@@ -23,16 +23,4 @@ class BinarySearchSpec extends FunSuite {
     assert(BinarySearch.liftIndexInRotatedArray(200, array).contains(3))
   }
 
-  test("rotateArray case 1") {
-    val actual = BinarySearch.rotateArray(IndexedSeq(1, 10, 20, 0, 59, 86, 32, 11, 9, 40), -1)
-    val expected = IndexedSeq(10, 20, 0, 59, 86, 32, 11, 9, 40, 1)
-    assert(expected == actual)
-  }
-
-  test("rotateArray case 2") {
-    val actual = BinarySearch.rotateArray(IndexedSeq(1, 10, 20, 0, 59, 86, 32, 11, 9, 40), 2)
-    val expected = IndexedSeq(9, 40, 1, 10, 20, 0, 59, 86, 32, 11)
-    assert(expected == actual)
-  }
-
 }
