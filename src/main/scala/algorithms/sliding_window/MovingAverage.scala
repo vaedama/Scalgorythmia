@@ -4,6 +4,9 @@ import scala.annotation.tailrec
 
 object MovingAverage {
 
+  // Intuition: moving average means it follows a sliding window pattern
+  // Sliding window pattern involves maintaining two pointers
+  // O(n) time and space
   def calculate[A](stream: Stream[A], size: Int)(implicit numeric: Numeric[A]): Iterator[Double] =
     if (stream.isEmpty) Iterator.empty
     else {
@@ -12,10 +15,14 @@ object MovingAverage {
       @tailrec def loop(windowStart: Int, windowEnd: Int, windowSum: A, memo: Iterator[Double]): Iterator[Double] =
         if (windowEnd >= lastIndex) memo
         else {
-          val minusStart = numeric.minus(windowSum, stream(windowStart))
-          val plusEndNext = numeric.plus(minusStart, stream(windowEnd + 1))
-          val avg = numeric.toDouble(plusEndNext) / size
-          loop(windowStart + 1, windowEnd + 1, plusEndNext, memo ++ Iterator.single(avg))
+          val start = stream(windowStart)
+          val minusStart = numeric.minus(windowSum, start)
+
+          val nextStart = stream(windowEnd + 1)
+          val curWindowSum = numeric.plus(minusStart, nextStart)
+
+          val avg = numeric.toDouble(curWindowSum) / size
+          loop(windowStart + 1, windowEnd + 1, curWindowSum, memo ++ Iterator.single(avg))
         }
 
       val windowSum = stream.slice(0, size).sum

@@ -4,6 +4,8 @@ import scala.annotation.tailrec
 
 object SlidingWindowMaxima {
 
+  // Intuition: sliding window can be solved by maintaining two pointers
+  // O(n) time and space
   def maxima[A](seq: IndexedSeq[A], windowSize: Int)(implicit ord: Ordering[A]): IndexedSeq[A] = {
     if (seq.isEmpty || windowSize < 0) IndexedSeq.empty[A]
     else if (windowSize == 0) IndexedSeq(seq.max)
