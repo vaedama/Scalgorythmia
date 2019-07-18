@@ -8,7 +8,7 @@ class TopologicalSortSpec extends FunSuite {
   test("case 1") {
     val actual = TopologicalSort.sort(Seq((3, 2), (3, 0), (2, 0), (2, 1))).right.get.result
     val expected = Seq(3, 2, 0, 1)
-    assert(expected == actual)
+    assert(expected === actual)
   }
 
   /*
@@ -54,7 +54,7 @@ class TopologicalSortSpec extends FunSuite {
   test("case 2") {
     val actual = TopologicalSort.sort(Seq((4, 2), (4, 3), (2, 0), (2, 1), (3, 1))).right.get.result
     val expected = Seq(4, 2, 3, 0, 1)
-    assert(expected == actual)
+    assert(expected === actual)
   }
 
   /*
@@ -73,7 +73,7 @@ class TopologicalSortSpec extends FunSuite {
   test("case 3") {
     val actual = TopologicalSort.sort(Seq((6, 4), (6, 2), (5, 3), (5, 4), (3, 0), (3, 1), (3, 2), (4, 1))).right.get.result
     val expected = Seq(5, 6, 3, 4, 0, 1, 2)
-    assert(expected == actual)
+    assert(expected === actual)
   }
 
   /*
@@ -90,7 +90,7 @@ class TopologicalSortSpec extends FunSuite {
   test("case 4") {
     val actual = TopologicalSort.sort(Seq((3, 2), (3, 0), (2, 0), (2, 1), (1, 3))).left.get
     val expected = CycleDetectedError(Map(3 -> Set(3, 2, 1)))
-    assert(expected == actual)
+    assert(expected === actual)
   }
 
 }
