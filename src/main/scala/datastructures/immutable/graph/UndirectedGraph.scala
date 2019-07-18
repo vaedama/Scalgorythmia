@@ -14,16 +14,16 @@ class UndirectedGraph[Vertex](store: Map[Vertex, List[Vertex]]) extends Adjacenc
 
   // O(1) time and space
   override def addEdge(v1: Vertex, v2: Vertex): AdjacencyListGraph[Vertex] = {
-    val v1Neighbors = v2 +: store.getOrElse(v1, Nil)
-    val v2Neighbors = v1 +: store.getOrElse(v2, Nil)
-    new UndirectedGraph(store + (v1 -> v1Neighbors) + (v2 -> v2Neighbors))
+    val v1Entry = v1 -> (v2 +: store.getOrElse(v1, Nil))
+    val v2Entry = v2 -> (v1 +: store.getOrElse(v2, Nil))
+    new UndirectedGraph(store + v1Entry + v2Entry)
   }
 
   // O(2*|E|) time and space
   override def removeEdge(v1: Vertex, v2: Vertex): AdjacencyListGraph[Vertex] = {
-    val v1Neighbors = store.getOrElse(v1, Nil).filter(_ != v2)
-    val v2Neighbors = store.getOrElse(v2, Nil).filter(_ != v1)
-    new UndirectedGraph(store + (v1 -> v1Neighbors) + (v2 -> v2Neighbors))
+    val v1Entry = v1 -> store.getOrElse(v1, Nil).filter(_ != v2)
+    val v2Entry = v2 -> store.getOrElse(v2, Nil).filter(_ != v1)
+    new UndirectedGraph(store + v1Entry + v2Entry)
   }
 
 }

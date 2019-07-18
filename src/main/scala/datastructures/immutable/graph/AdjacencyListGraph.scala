@@ -1,5 +1,6 @@
 package datastructures.immutable.graph
 
+import scala.annotation.tailrec
 import scala.collection.immutable.Queue
 
 // Adjacency List implementation of Graph data structure.
@@ -26,18 +27,49 @@ abstract class AdjacencyListGraph[Vertex](private val neighborsByVertex: Map[Ver
   // We check each vertex and each edge once (or twice for an undirected graph)
   def bfs(source: Vertex): Stream[Vertex] =
     Stream.iterate(Queue(source) -> Set(source)) { case (queue, visited) =>
-      val (first, rearQ) = queue.dequeue
-      val unvisited = neighbors(first).filterNot(visited)
-      rearQ.enqueue(unvisited) -> (visited ++ unvisited)
+      val (head, rest) = queue.dequeue
+      val unvisited = neighbors(head).filterNot(visited)
+      rest.enqueue(unvisited) -> (visited ++ unvisited)
     }.takeWhile(_._1.nonEmpty).map(_._1.head)
+
+  // Similar to the above "bfs" version without using Stream
+  // O(|V| + |E|) time and space
+  // We check each vertex and each edge once (or twice for an undirected graph)
+  def bfsIterator(source: Vertex): Iterator[Vertex] = {
+    @tailrec def loop(queue: Queue[Vertex], visited: Set[Vertex], memo: List[Vertex] = Nil): List[Vertex] =
+      if (queue.isEmpty) memo
+      else {
+        val (head, rest) = queue.dequeue
+        val unvisited = neighbors(head).filterNot(visited)
+        loop(rest.enqueue(unvisited), visited ++ unvisited, head +: memo)
+      }
+
+    loop(Queue(source), Set(source)).reverseIterator
+  }
 
   // O(|V| + |E|) time and space
   // We check each vertex and each edge once (or twice for an undirected graph)
   def dfs(source: Vertex): Stream[Vertex] =
     Stream.iterate(List(source) -> Set(source)) { case (stack, visited) =>
-      val unvisited = neighbors(stack.head).filterNot(visited)
+      val head = stack.head
+      val unvisited = neighbors(head).filterNot(visited)
       unvisited ++ stack.tail -> (visited ++ unvisited)
     }.takeWhile(_._1.nonEmpty).map(_._1.head)
+
+  // Similar to the above "dfs" version without using Stream
+  // O(|V| + |E|) time and space
+  // We check each vertex and each edge once (or twice for an undirected graph)
+  def dfsIterator(source: Vertex): Iterator[Vertex] = {
+    @tailrec def loop(stack: List[Vertex], visited: Set[Vertex], memo: List[Vertex] = Nil): List[Vertex] =
+      if (stack.isEmpty) memo
+      else {
+        val head = stack.head
+        val unvisited = neighbors(head).filterNot(visited)
+        loop(unvisited ++ stack.tail, visited ++ unvisited, head +: memo)
+      }
+
+    loop(List(source), Set(source)).reverseIterator
+  }
 
   // O(|V| + |E|) time and space
   def containsPath(start: Vertex, end: Vertex): Boolean =
