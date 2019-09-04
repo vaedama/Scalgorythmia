@@ -8,7 +8,9 @@ import algorithms.sorting.MergeSort
 // Applications:
 // 1. DFS
 // 2. Expression evaluation algorithms
-case class Stack[A](as: List[A], _size: Int) {
+case class Stack[A] private(
+  as: List[A],
+  _size: Int) {
 
   // O(1) time and space
   def pop: Option[(A, Stack[A])] = as match {

@@ -52,19 +52,31 @@ class AdjacencyListGraphSpec extends FunSuite {
         "San Diego" -> Nil
       ))
 
-    diGraph == diGraphFilled
+    assert(diGraph == diGraphFilled)
   }
 
   test("bfs") {
     val actual = diGraph.bfs("San Francisco").toList
     val expected = List("San Francisco", "Las Vegas", "San Jose", "Sacramento", "Santa Cruz", "Los Angeles", "San Diego")
-    assert(actual == expected)
+    assert(actual === expected)
+  }
+
+  test("bfsIterator") {
+    val actual = diGraph.bfsIterator("San Francisco").toList
+    val expected = List("San Francisco", "Las Vegas", "San Jose", "Sacramento", "Santa Cruz", "Los Angeles", "San Diego")
+    assert(actual === expected)
   }
 
   test("dfs") {
     val actual = diGraph.dfs("San Francisco").toList
     val expected = List("San Francisco", "Las Vegas", "San Jose", "Santa Cruz", "Los Angeles", "San Diego", "Sacramento")
-    assert(actual == expected)
+    assert(actual === expected)
+  }
+
+  test("dfsIterator") {
+    val actual = diGraph.dfsIterator("San Francisco").toList
+    val expected = List("San Francisco", "Las Vegas", "San Jose", "Santa Cruz", "Los Angeles", "San Diego", "Sacramento")
+    assert(actual === expected)
   }
 
   test("containsPath: positive case") {

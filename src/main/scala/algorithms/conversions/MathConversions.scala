@@ -9,14 +9,17 @@ object MathConversions {
   ==========================
   1. Divide decimal by 2 => get quotient
   2. Modular divide decimal by 2 => get reminder
-  3. Repeat steps (1) and (2) until quotient is zero accumulating the reminders at each level.
+  3. Repeat steps (1) and (2) until quotient is zero by accumulating the reminders at each level
   4. Convert the reminders to a BigInt
+
+  q = quotient
+  r = remainder
 
   Example 1:
   ----------
    i = 3
    3 : 2 => q = 1, r = 1
-   1 : 2 => 1 = 0, r = 1
+   1 : 2 => q = 0, r = 1
    binary = 11
 
    Example 2:
@@ -28,21 +31,24 @@ object MathConversions {
    1 : 2 => q = 0; r = 1
    binary = 1100
    */
-  def decimalToBinary(decimal: Int): BigInt = {
-    @tailrec def loop(q: Int, rems: List[Int]): BigInt =
-      if (q == 0) BigInt(rems.mkString)
-      else loop(q/2, (q%2) :: rems)
+  def decimalToBinary[A](a: A)(implicit integral: Integral[A]): BigInt = {
+    val two = integral.plus(integral.one, integral.one)
+    def quot(i: A): A = integral.quot(i, two)
+    def rem(i: A): A = integral.rem(i, two)
 
-    loop(decimal/2, List(decimal%2))
+    @tailrec def loop(q: A, memo: String): BigInt =
+      if (q == 0) BigInt(memo)
+      else loop(quot(q), rem(q) + memo)
+
+    loop(quot(a), rem(a).toString)
   }
 
   /*
   binaryToDecimal intuition:
   ==========================
-  1. Initialize an accumulator to hold the decimal to 0
-  2. Consume the binary, element by element, multiplying it by 2 and adding it to the accumulator
-  3. Repeat (2) until the end of binary is reached.
-  4. Return the accumulated sum.
+  1. Consume the binary input element by element by adding it to accumulator multiplied by 2
+  2. Repeat until the end of binary input is reached
+  3. Return the accumulated sum.
 
   Example 1:
   ----------
@@ -56,7 +62,7 @@ object MathConversions {
   def binaryToDecimal(binary: BigInt): Int = {
     @tailrec def loop(bin: String, sum: Int): Int =
       if (bin.isEmpty) sum
-      else loop(bin.tail, (2 * sum) + bin.head.toInt)
+      else loop(bin.tail, (2 * sum) + bin.head.toString.toInt)
 
     loop(binary.toString, 0)
   }

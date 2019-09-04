@@ -20,11 +20,12 @@ If the current character does not exist in the hast set:
  */
 object LongestSubStringWithoutRepeatingCharacters {
 
+  // O(n) time and space
   def lengthIterative(in: String): Int = {
     var start = 0
     var end = 0
-    var occ = mutable.Set[Char]()
     var len = 0
+    val occ = mutable.Set[Char]()
 
     while (in.length > end) {
       val cur = in.charAt(end)
@@ -40,6 +41,7 @@ object LongestSubStringWithoutRepeatingCharacters {
     len
   }
 
+  // O(n) time and space
   def lengthRecursive(in: String): Int = {
     @tailrec def loop(start: Int, end: Int, occ: Set[Char], len: Int): Int =
       if (end == in.length) len

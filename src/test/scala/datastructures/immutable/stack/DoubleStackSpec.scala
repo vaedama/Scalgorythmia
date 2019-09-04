@@ -20,21 +20,21 @@ class DoubleStackSpec extends FunSuite {
   test("pop1") {
     val (top, bottom) = stack.pop1
     assert(top.contains(3))
-    assert(bottom == DoubleStack(Vector(1, 2, 4)))
+    assert(bottom === DoubleStack(Vector(1, 2, 4), 3))
   }
 
   test("pop2") {
     val (top, bottom) = stack.pop2
     assert(top.contains(4))
-    assert(bottom == DoubleStack(Vector(3, 1, 2)))
+    assert(bottom === DoubleStack(Vector(3, 1, 2), 3))
   }
 
   test("push1") {
-    assert(stack.push1(5) == DoubleStack(Vector(5, 3, 1, 2, 4)))
+    assert(stack.push1(5) === DoubleStack(Vector(5, 3, 1, 2, 4), 5))
   }
 
   test("push2") {
-    assert(stack.push2(5) == DoubleStack(Vector(3, 1, 2, 4, 5)))
+    assert(stack.push2(5) === DoubleStack(Vector(3, 1, 2, 4, 5), 5))
   }
 
   test("isEmpty") {
@@ -42,11 +42,11 @@ class DoubleStackSpec extends FunSuite {
   }
 
   test("toList") {
-    assert(stack.toList == List(3, 1, 2, 4))
+    assert(stack.toList === List(3, 1, 2, 4))
   }
 
   test("size") {
-    assert(stack.size == 4)
+    assert(stack.size === 4)
   }
 
 }

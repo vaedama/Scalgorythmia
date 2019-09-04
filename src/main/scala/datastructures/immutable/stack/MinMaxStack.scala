@@ -2,7 +2,10 @@ package datastructures.immutable.stack
 
 // LIFO structure
 // Implements min and max operations in constant time
-case class MinMaxStack[A] private(as: List[A], minMaxList: List[(A, A)], _size: Int)(implicit ord: Ordering[A]) {
+case class MinMaxStack[A] private(
+  as: List[A],
+  minMaxList: List[(A, A)],
+  _size: Int)(implicit ord: Ordering[A]) {
 
   // O(1) time and space
   def min: Option[A] = minMaxList.headOption.map(_._1)
@@ -27,10 +30,12 @@ case class MinMaxStack[A] private(as: List[A], minMaxList: List[(A, A)], _size: 
   }
 
   // O(1) time and space
-  def top: Option[A] = pop.map(_._1)
+  def top: Option[A] = as.headOption
 
   // O(1) time and space
-  def bottom: MinMaxStack[A] = pop.map(_._2).getOrElse(MinMaxStack.empty[A])
+  def bottom: MinMaxStack[A] =
+    if (as.isEmpty) MinMaxStack.empty[A]
+    else new MinMaxStack(as.tail, minMaxList.tail, _size - 1)
 
   // O(1) time and space
   def isEmpty: Boolean = _size == 0

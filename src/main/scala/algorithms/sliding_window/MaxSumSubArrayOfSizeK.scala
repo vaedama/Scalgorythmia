@@ -2,7 +2,8 @@ package algorithms.sliding_window
 
 object MaxSumSubArrayOfSizeK {
 
-  // O(N) time and space
+  // Intuition: maintain two pointers for sub-array problems
+  // O(n) time and space
   def maxSum[N](array: Array[N], k: Int)(implicit numeric: Numeric[N]): N = {
     if (k <= 0) throw new IllegalArgumentException("k must be > 0")
 
