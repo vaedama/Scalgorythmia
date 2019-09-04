@@ -5,11 +5,22 @@ import scala.annotation.tailrec
 object MathConversions {
 
   /*
+  decimalToBinary intuition:
+  ==========================
+  1. Divide decimal by 2 => get quotient
+  2. Modular divide decimal by 2 => get reminder
+  3. Repeat steps (1) and (2) until quotient is zero accumulating the reminders at each level.
+  4. Convert the reminders to a BigInt
+
+  Example 1:
+  ----------
    i = 3
    3 : 2 => q = 1, r = 1
    1 : 2 => 1 = 0, r = 1
    binary = 11
-   ---------------------
+
+   Example 2:
+  ----------
    i = 12
    12 : 2 => q = 6; r = 0
    6 : 2 => q = 3; r = 0
@@ -18,15 +29,23 @@ object MathConversions {
    binary = 1100
    */
   def decimalToBinary(decimal: Int): BigInt = {
-    @tailrec def loop(quotient: Int, memo: String): BigInt = {
-      if (quotient == 0) BigInt(memo)
-      else loop(quotient / 2, (quotient % 2) + memo)
-    }
+    @tailrec def loop(q: Int, rems: List[Int]): BigInt =
+      if (q == 0) BigInt(rems.mkString)
+      else loop(q/2, (q%2) :: rems)
 
-    loop(decimal / 2, (decimal % 2).toString)
+    loop(decimal/2, List(decimal%2))
   }
 
   /*
+  binaryToDecimal intuition:
+  ==========================
+  1. Initialize an accumulator to hold the decimal to 0
+  2. Consume the binary, element by element, multiplying it by 2 and adding it to the accumulator
+  3. Repeat (2) until the end of binary is reached.
+  4. Return the accumulated sum.
+
+  Example 1:
+  ----------
   binary = 1011
   2 * 0 + 1 = 1
   2 * 1 + 0 = 2
@@ -35,17 +54,15 @@ object MathConversions {
   decimal = 11
   */
   def binaryToDecimal(binary: BigInt): Int = {
-    @tailrec def loop(remBin: String, sum: Int): Int = {
-      if (remBin.isEmpty) sum
-      else loop(remBin.tail, (2 * sum) + Integer.parseInt(s"${remBin.head}", 10))
-    }
+    @tailrec def loop(bin: String, sum: Int): Int =
+      if (bin.isEmpty) sum
+      else loop(bin.tail, (2 * sum) + bin.head.toInt)
 
     loop(binary.toString, 0)
   }
 
   // modular arithmetic
-  def getNthDigit(number: Int, base: Int, n: Int): Int = {
+  def nthDigit(number: Int, base: Int, n: Int): Int =
     ((number / Math.pow(base, n)) % 10).toInt
-  }
 
 }
