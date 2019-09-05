@@ -7,7 +7,7 @@ object MedianOfTwoSortedArrays {
   // Calculate the average in case of even length array.
   // Otherwise, the middle element of the array is the median
   def median(arr1: Array[Int], arr2: Array[Int]): Double = {
-    val merged = MergeSortedLists.merge2(arr1, arr2)
+    val merged = MergeSortedSequences.merge(arr1, arr2)
 
     if (merged.length % 2 == 0) {
       val index = merged.length / 2
