@@ -3,29 +3,27 @@ package datastructures.immutable.queue
 import algorithms.sorting.MergeSort
 import datastructures.immutable.stack.Stack
 
-// FIFO data structure
-// Functional implementation of Queue aka Banker's Queue
-// Queue Applications:
-// - BFS
-// - Priority Queue: Priority switching between processes by OS
-// - Circular queue: Event handling
-case class Queue[+A] private(
+/*
+Functional implementation of Queue aka Banker's Queue (LIFO structure)
+Queue Applications:
+- BFS
+- Priority Queue: Priority switching between processes by OS
+- Circular queue: Event handling
+ */
+case class Queue[A] private(
   in: List[A],
   out: List[A],
   _size: Int) {
 
   // O(1) time and space
-  def enqueue[B >: A](b: B): Queue[B] = new Queue(b :: in, out, _size + 1)
+  def enqueue[B >: A](b: B): Queue[B] = copy(b :: in, out, _size + 1)
 
   // O(1) time and space amortized
   def dequeue: (Option[A], Queue[A]) = out match {
-    case h :: t =>
-      Some(h) -> new Queue(in, t, _size - 1)
+    case h :: t => Some(h) -> copy(in, t, _size - 1)
     case Nil => in.reverse match {
-      case h :: t =>
-        Some(h) -> new Queue(Nil, t, _size - 1)
-      case Nil =>
-        None -> new Queue(Nil, Nil, 0)
+      case h :: t => Some(h) -> copy(Nil, t, _size - 1)
+      case Nil => None -> copy(Nil, Nil, 0)
     }
   }
 
@@ -36,7 +34,7 @@ case class Queue[+A] private(
   def rear: Queue[A] = dequeue._2
 
   // O(1) time and space
-  def isEmpty: Boolean = in.isEmpty && out.isEmpty
+  def isEmpty: Boolean = _size == 0
 
   // O(1) time and space
   def size: Int = _size
@@ -52,24 +50,26 @@ case class Queue[+A] private(
     else s"Queue(${toList.mkString})"
   }
 
+  // O(1) time and space amortized
   def toList: List[A] = out ++ in.reverse
+
+  // O(n log n) time and space
+  def sorted(implicit ord: Ordering[A]): Queue[A] = copy(Nil, MergeSort.sort(toList).toList)
 
 }
 
 object Queue {
 
   // O(1) time and space
-  def empty[A]: Queue[A] = new Queue(Nil, Nil, 0)
+  def empty[A]: Queue[A] =
+    new Queue(Nil, Nil, 0)
 
   // O(n) time and O(1) space
-  def apply[A](as: A*): Queue[A] = as.foldLeft(empty[A])((memo, next) => memo.enqueue(next))
+  def apply[A](as: A*): Queue[A] =
+    as.foldLeft(empty[A])(_ enqueue _)
 
   // O(n) time and space
   def apply[A](stack: Stack[A]): Queue[A] =
     apply(stack.toList.reverse: _*)
-
-  // O(n log n) time and space
-  def sort[A](queue: Queue[A])(implicit ordering: Ordering[A]): Queue[A] =
-    new Queue(Nil, MergeSort.sort[A](queue.toList).toList, queue.size)
 
 }
